@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* WhatsApp-inspired chat design system */
+
+@layer base {
+    :root {
+        --background: 210 20% 98%;
+        --foreground: 210 20% 10%;
+
+        --card: 0 0% 100%;
+        --card-foreground: 210 20% 10%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 210 20% 10%;
+
+        /* WhatsApp green */
+        --primary: 152 69% 49%;
+        --primary-foreground: 0 0% 100%;
+
+        --secondary: 210 20% 96%;
+        --secondary-foreground: 210 20% 20%;
+
+        --muted: 210 15% 94%;
+        --muted-foreground: 210 10% 45%;
+
+        --accent: 152 69% 49%;
+        --accent-foreground: 0 0% 100%;
+
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 100%;
+
+        --border: 210 20% 90%;
+        --input: 210 20% 92%;
+        --ring: 152 69% 49%;
+
+        --radius: 1rem;
+
+        /* Chat specific */
+        --chat-bg: 210 20% 95%;
+        --chat-header: 152 54% 40%;
+        --chat-header-foreground: 0 0% 100%;
+        --user-bubble: 152 69% 49%;
+        --user-bubble-foreground: 0 0% 100%;
+        --assistant-bubble: 0 0% 100%;
+        --assistant-bubble-foreground: 210 20% 15%;
+        --input-bar-bg: 0 0% 100%;
+        --typing-dot: 210 10% 60%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+    }
+}
+
+@layer utilities {
+    .message-enter {
+        animation: messageSlideIn 0.3s ease-out forwards;
+    }
+
+    @keyframes messageSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .typing-dot {
+        animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+        animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+        animation-delay: -0.16s;
+    }
+
+    @keyframes typingBounce {
+        0%, 80%, 100% {
+            transform: scale(0.6);
+            opacity: 0.5;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--muted-foreground) / 0.3);
+        border-radius: 3px;
+    }
+}

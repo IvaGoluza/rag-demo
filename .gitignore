@@ -6,6 +6,7 @@
 # ======================
 # Python (Backend)
 # ======================
+rag-demo-be/chroma/
 .venv/
 __pycache__/
 *.pyc

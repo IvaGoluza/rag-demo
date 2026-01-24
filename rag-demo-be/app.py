@@ -37,7 +37,11 @@ os.environ["HUGGINGFACEHUB_API_TOKEN"] = HF_TOKEN
 # ------------------------------------------------------------------------------
 
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    supports_credentials=True,
+)
 
 # ------------------------------------------------------------------------------
 # Build RAG ONCE

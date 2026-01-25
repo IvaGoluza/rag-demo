@@ -1,4 +1,4 @@
-# RAG Demo APP
+# RAG demo app
 This is a simple Retrieval-Augmented Generation (RAG) that demonstrates how a conversational chatbot can answer questions based on a custom document knowledge base.
 - Backend: Flask + LangChain RAG pipeline
 - Frontend: React + TypeScript + Tailwind (built with Vite)

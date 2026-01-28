@@ -104,8 +104,11 @@ QA_PROMPT = PromptTemplate(
 You are a question-answering assistant.
 
 Answer the question using the context.
+If the question is in Croatian, answer in Croatian.
+If the question is in English, answer in English.
 If you cannot find the answer, respond:
 "I don't know based on the provided documents."
+or "Ne mogu odgovoriti iz danih dokumenata."
 
 Do NOT guess.
 

@@ -54,8 +54,16 @@ pdf_files = glob.glob("./knowledge_base/*.pdf")
 documents = []
 
 for pdf in pdf_files:
+    print(f"➡️ Loading PDF: {pdf}")
     loader = PyPDFLoader(pdf)
-    documents.extend(loader.load())
+    docs = loader.load()
+    print(f"    Pages loaded: {len(docs)}")
+    documents.extend(docs)
+
+print(f"📄 PDFs found: {len(pdf_files)}")
+print(f"📄 Pages loaded: {len(documents)}")
+for i, d in enumerate(documents[:5]):
+    print(f"Page {i} length:", len(d.page_content))
 
 # Split
 splitter = RecursiveCharacterTextSplitter(
@@ -66,6 +74,9 @@ splitter = RecursiveCharacterTextSplitter(
 
 splits = splitter.split_documents(documents)
 
+print(f"✂️ Chunks created: {len(splits)}")
+print("Sample chunk:", splits[0].page_content[:300])
+
 # Embeddings
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-mpnet-base-v2"
@@ -74,20 +85,11 @@ embeddings = HuggingFaceEmbeddings(
 persist_directory = os.path.join(os.getcwd(), "chroma")
 
 # Vector store (load or create)
-vectordb = Chroma(
+vectordb = Chroma.from_documents(
+    documents=splits,
+    embedding=embeddings,
     persist_directory=persist_directory,
-    embedding_function=embeddings,
 )
-
-if vectordb._collection.count() == 0:
-    print("🔹 Creating Chroma index...")
-    vectordb = Chroma.from_documents(
-        documents=splits,
-        embedding=embeddings,
-        persist_directory=persist_directory,
-    )
-else:
-    print("🔹 Loaded existing Chroma index")
 
 # LLM
 llm_endpoint = HuggingFaceEndpoint(
@@ -103,14 +105,13 @@ QA_PROMPT = PromptTemplate(
     template="""
 You are a question-answering assistant.
 
-Answer the question using the context.
-If the question is in Croatian, answer in Croatian.
-If the question is in English, answer in English.
+Answer the question in Croatian language.
+Answer the question using ONLY the context.
+Do NOT guess. Do not include internet based answers outside provided context.
 If you cannot find the answer, respond:
-"I don't know based on the provided documents."
-or "Ne mogu odgovoriti iz danih dokumenata."
+"Ne mogu odgovoriti iz danih dokumenata."
 
-Do NOT guess.
+Use full sentences and longer answer.
 
 Context:
 {context}
@@ -192,4 +193,4 @@ def health():
 # ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True, use_reloader=False)
